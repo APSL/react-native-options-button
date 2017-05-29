@@ -14,24 +14,54 @@ import {
 import OptionButton from './OptionButton'
 import Button from './Button'
 
-const ALMOST_ZERO = 0.00000001
+const ALMOST_ZERO: number = 0.00000001
 
-// TODO: change string option action to ENUM
+export type OptionItem = {
+  title: string,
+  onPress: Function
+}
 
-class OptionsButton extends React.Component {
-  state: Object
+type DefaultProps = void
+type Props = {
+  items: Array<OptionItem>,
+  title: string,
+  openTitle: string,
+  onPress: Function,
+  color: string,
+  isLoading?: boolean,
+  buttonStyle?: any,
+  buttonTextStyle?: any,
+  optionsStyle?: any
+}
+type State = {
+  isCollapsed: boolean,
+  height: Animated.Value,
+  width: Animated.Value,
+  saturation: Animated.Value
+}
+
+class OptionsButton extends React.Component<DefaultProps, Props, State> {
+  state: State
   startAnimation: Function
 
   static propTypes = {
-    color: PropTypes.string,
-    font: PropTypes.string,
-    textStyle: Text.propTypes.style,
-    allowAmend: PropTypes.bool.isRequired,
-    allowCancel: PropTypes.bool.isRequired,
-    allowAcceptReconfirm: PropTypes.bool.isRequired,
-    allowSendVoucher: PropTypes.bool.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        onPress: PropTypes.func.isRequired
+      })
+    ).isRequired,
+    title: PropTypes.string.isRequired,
+    openTitle: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    color: PropTypes.string.isRequired,
     isLoading: PropTypes.bool,
-    onPress: PropTypes.func
+    buttonStyle: PropTypes.any,
+    buttonTextStyle: PropTypes.any,
+    optionsStyle: PropTypes.any,
+
+    font: PropTypes.string,
+    textStyle: Text.propTypes.style
   }
 
   constructor(props: Object) {
@@ -42,11 +72,9 @@ class OptionsButton extends React.Component {
       width: new Animated.Value(100),
       saturation: new Animated.Value(100)
     }
-    this.startAnimation = this._startAnimation.bind(this)
   }
 
-  _startAnimation(option: string) {
-    const { allowAmend, allowCancel, allowAcceptReconfirm, allowSendVoucher } = this.props
+  _startAnimation = (index: number) => {
     let height = ALMOST_ZERO
     let saturation = 100
     let width = 100
@@ -56,11 +84,7 @@ class OptionsButton extends React.Component {
       easing: Easing.inOut(Easing.bezier(1.000, 0.000, 0.915, 1.065))
     })
     if (this.state.isCollapsed) {
-      height =
-        (allowAmend ? 44 : 0) +
-        (allowCancel ? 44 : 0) +
-        (allowAcceptReconfirm ? 44 : 0) +
-        (allowSendVoucher ? 44 : 0)
+      height = 44 * this.props.items.length
       saturation = 0
       width = 0
       collapseAnimation = Animated.spring(this.state.height, {
@@ -80,90 +104,11 @@ class OptionsButton extends React.Component {
       }),
       collapseAnimation
     ]).start()
-    const isCollapsed = !this.state.isCollapsed
-    this.setState({ isCollapsed })
+    this.setState({ isCollapsed: !this.state.isCollapsed })
     // Pass the option selected
     InteractionManager.runAfterInteractions(() => {
-      this.props.onPress(option)
+      this.props.onPress && this.props.onPress(index)
     })
-  }
-
-  _renderBookingHistory() {
-    return null
-    // return (
-    //   <OptionButton style={[styles.option, styles.separator]}
-    //     textStyle={[styles.optionText, {fontFamily: this.props.font}]}
-    //     onPress={() => this.startAnimation('history')}>
-    //     Booking history
-    //   </OptionButton>
-    // )
-  }
-
-  _renderAmend() {
-    if (this.props.allowAmend) {
-      return (
-        <OptionButton
-          style={[styles.option, styles.separator]}
-          textStyle={[styles.optionText, { fontFamily: this.props.font }]}
-          onPress={() => this.startAnimation('amend')}
-        >
-          Amend booking
-        </OptionButton>
-      )
-    }
-  }
-
-  _renderProforma() {
-    return null
-    // return (
-    //   <OptionButton style={[styles.option, styles.separator]}
-    //     textStyle={[styles.optionText, {fontFamily: this.props.font}]}
-    //     onPress={() => this.startAnimation('invoice')}>
-    //     Proforma invoice
-    //   </OptionButton>
-    // )
-  }
-
-  _renderCancel() {
-    if (this.props.allowCancel) {
-      return (
-        <OptionButton
-          style={[styles.option, styles.separator]}
-          textStyle={[styles.optionText, { fontFamily: this.props.font }]}
-          onPress={() => this.startAnimation('cancel')}
-        >
-          Cancel booking
-        </OptionButton>
-      )
-    }
-  }
-
-  _renderReconfirm() {
-    if (this.props.allowAcceptReconfirm) {
-      return (
-        <OptionButton
-          style={[styles.option, styles.separator]}
-          textStyle={[styles.optionText, { fontFamily: this.props.font }]}
-          onPress={() => this.startAnimation('reconfirm')}
-        >
-          Accept & reconfirm
-        </OptionButton>
-      )
-    }
-  }
-
-  _renderSendVoucher() {
-    if (this.props.allowSendVoucher) {
-      return (
-        <OptionButton
-          style={styles.option}
-          textStyle={[styles.optionText, { fontFamily: this.props.font }]}
-          onPress={() => this.startAnimation('sendVoucher')}
-        >
-          Send Voucher
-        </OptionButton>
-      )
-    }
   }
 
   _renderOptions() {
@@ -171,15 +116,21 @@ class OptionsButton extends React.Component {
       <Animated.View
         style={[
           styles.options,
+          this.props.optionsStyle,
           { backgroundColor: this.props.color, height: this.state.height }
-        ]}
-      >
-        {this._renderBookingHistory()}
-        {this._renderAmend()}
-        {this._renderProforma()}
-        {this._renderCancel()}
-        {this._renderReconfirm()}
-        {this._renderSendVoucher()}
+        ]}>
+        {this.props.items.map(
+          (item: OptionItem, index: number, arr: Array<OptionItem>): OptionButton => (
+            <OptionButton
+              key={`${item.title}-${index}`}
+              index={index}
+              style={[styles.option, index === arr.length - 1 ? {} : styles.separator]}
+              textStyle={[styles.optionText, { fontFamily: this.props.font }]}
+              onPress={this._startAnimation}>
+              {item.title}
+            </OptionButton>
+          )
+        )}
       </Animated.View>
     )
   }
@@ -188,8 +139,12 @@ class OptionsButton extends React.Component {
     if (this.props.isLoading) {
       return (
         <Animated.View
-          style={[styles.button, styles.loader, { backgroundColor: this.props.color }]}
-        >
+          style={[
+            styles.button,
+            styles.loader,
+            { backgroundColor: this.props.color },
+            this.props.buttonStyle
+          ]}>
           <ActivityIndicator animating={true} color="white" />
         </Animated.View>
       )
@@ -199,11 +154,11 @@ class OptionsButton extends React.Component {
         activeOpacity={0.9}
         style={[
           styles.button,
+          this.props.buttonStyle,
           { backgroundColor: color, borderColor: color, width: width }
         ]}
-        textStyle={[this.props.textStyle, { fontFamily: this.props.font }]}
-        onPress={() => this.startAnimation('')}
-      >
+        textStyle={this.props.buttonTextStyle}
+        onPress={this._startAnimation}>
         {text}
       </Button>
     )
@@ -218,7 +173,7 @@ class OptionsButton extends React.Component {
       inputRange: [0, 100],
       outputRange: [74, Dimensions.get('window').width - 50]
     })
-    const text = this.state.isCollapsed ? 'OPTIONS' : 'CLOSE'
+    const text = this.state.isCollapsed ? this.props.title : this.props.openTitle
     return (
       <View style={styles.container}>
         {this._renderOptions()}
@@ -235,7 +190,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 49,
+    bottom: 0,
     marginLeft: 25,
     marginRight: 25
   },

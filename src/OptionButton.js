@@ -10,12 +10,27 @@ import {
   StyleSheet
 } from 'react-native'
 
-class OptionButton extends React.Component {
+type DefaultProps = void
+type Props = {
+  index: number,
+  children: string,
+  onPress: Function,
+  style: any,
+  textStyle: any
+}
+type State = void
+
+class OptionButton extends React.Component<DefaultProps, Props, State> {
   static propTypes = {
+    index: PropTypes.number.isRequired,
     children: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
     style: View.propTypes.style,
     textStyle: Text.propTypes.style
+  }
+
+  _onPress = () => {
+    this.props.onPress(this.props.index)
   }
 
   render() {
@@ -24,9 +39,8 @@ class OptionButton extends React.Component {
       : TouchableNativeFeedback
     return (
       <TouchableElement
-        onPress={this.props.onPress}
-        style={[this.props.style, styles.container]}
-      >
+        onPress={this._onPress}
+        style={[this.props.style, styles.container]}>
         <Text style={[styles.text, this.props.textStyle]}>
           {this.props.children.toUpperCase()}
         </Text>
