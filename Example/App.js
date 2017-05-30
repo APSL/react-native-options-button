@@ -2,14 +2,13 @@
 
 import React from 'react'
 import { View } from 'react-native'
-import { OptionsButton } from './rnob'
+import { OptionsButton } from 'react-native-options-button'
 
 class App extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
         <OptionsButton
-          color="rgba(219, 112, 147, 1)"
           items={[
             { title: 'Title 1', onPress: () => null },
             { title: 'Title 2', onPress: () => null },
@@ -22,6 +21,9 @@ class App extends React.Component {
           openTitle="Close"
           onPress={i => console.log(i)}
           buttonStyle={{ borderRadius: 0 }}
+          optionsStyle={{ borderRadius: 8 }}
+          buttonTextStyle={{ color: 'white' }}
+          containerStyle={{ bottom: 15 }}
         />
       </View>
     )

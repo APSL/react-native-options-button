@@ -1,22 +1,17 @@
 /* @flow */
 
 import React, { PropTypes } from 'react'
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-  StyleSheet
-} from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 type DefaultProps = void
 type Props = {
   index: number,
   children: string,
   onPress: Function,
-  style: any,
-  textStyle: any
+  renderSeparator: boolean,
+  style?: any,
+  textStyle?: any,
+  separatorStyle: any
 }
 type State = void
 
@@ -25,8 +20,10 @@ class OptionButton extends React.Component<DefaultProps, Props, State> {
     index: PropTypes.number.isRequired,
     children: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
+    renderSeparator: PropTypes.bool.isRequired,
     style: View.propTypes.style,
-    textStyle: Text.propTypes.style
+    textStyle: Text.propTypes.style,
+    separatorStyle: PropTypes.any
   }
 
   _onPress = () => {
@@ -34,18 +31,27 @@ class OptionButton extends React.Component<DefaultProps, Props, State> {
   }
 
   render() {
-    const TouchableElement = Platform.OS === 'ios'
-      ? TouchableOpacity
-      : TouchableNativeFeedback
-    return (
-      <TouchableElement
+    const TouchableButton = (
+      <TouchableOpacity
         onPress={this._onPress}
-        style={[this.props.style, styles.container]}>
+        style={[styles.container, this.props.style]}
+      >
         <Text style={[styles.text, this.props.textStyle]}>
           {this.props.children.toUpperCase()}
         </Text>
-      </TouchableElement>
+      </TouchableOpacity>
     )
+    if (this.props.renderSeparator) {
+      return (
+        <View>
+          {TouchableButton}
+          <View
+            style={[styles.separator, this.props.separatorStyle, styles.separatorHeight]}
+          />
+        </View>
+      )
+    }
+    return TouchableButton
   }
 }
 
@@ -58,6 +64,13 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center'
+  },
+  separator: {
+    backgroundColor: 'white'
+  },
+  separatorHeight: {
+    height: 1,
+    width: '100%'
   }
 })
 
