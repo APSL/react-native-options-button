@@ -1,16 +1,38 @@
 {
   "name": "react-native-options-button",
   "version": "0.1.0",
+  "description": "A fully customizable bottom animated options button.",
   "main": "index.js",
-  "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
-  "dependencies": {
-    "react": "16.0.0-alpha.6",
-    "react-native": "0.44.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/APSL/react-native-options-button.git"
   },
+  "tags": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "android"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "button",
+    "bottom",
+    "ios",
+    "android",
+    "react-component"
+  ],
+  "author": "Alvaro Medina Ballester <me@alvaromb.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/APSL/react-native-options-button/issues"
+  },
+  "homepage": "https://github.com/APSL/react-native-options-button#readme",
   "devDependencies": {
     "babel-jest": "20.0.3",
     "babel-preset-react-native": "1.9.2",
@@ -19,5 +41,6 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "dependencies": {}
 }
