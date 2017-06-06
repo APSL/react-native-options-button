@@ -10,16 +10,16 @@ class App extends React.Component {
       <View style={{ flex: 1 }}>
         <OptionsButton
           items={[
-            { title: 'Title 1', onPress: () => null },
-            { title: 'Title 2', onPress: () => null },
-            { title: 'Title 3', onPress: () => null },
-            { title: 'Title 4', onPress: () => null },
-            { title: 'Title 5', onPress: () => null },
-            { title: 'Title 6', onPress: () => null }
+            { title: 'Title 1', id: 0, onPress: () => null },
+            { title: 'Title 2', id: 1, onPress: () => null },
+            { title: 'Title 3', id: 2, onPress: () => null },
+            { title: 'Title 4', id: 3, onPress: () => null },
+            { title: 'Title 5', id: 4, onPress: () => null },
+            { title: 'Title 6', id: '5', onPress: () => null }
           ]}
           title="Menu"
           openTitle="Close"
-          onPress={i => console.log(i)}
+          onPress={(i, z) => console.log(i, z)}
           buttonStyle={{ borderRadius: 0 }}
           optionsStyle={{ borderRadius: 8 }}
           buttonTextStyle={{ color: 'white' }}

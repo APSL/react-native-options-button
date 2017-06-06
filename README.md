@@ -36,16 +36,16 @@ class App extends React.Component {
       <View style={{ flex: 1 }}>
         <OptionsButton
           items={[
-            { title: 'Title 1' },
-            { title: 'Title 2' },
-            { title: 'Title 3' },
-            { title: 'Title 4' },
-            { title: 'Title 5' },
-            { title: 'Title 6' }
+            { title: 'Title 1', id: 0, onPress: () => null },
+            { title: 'Title 2', id: 1, onPress: () => null },
+            { title: 'Title 3', id: 2, onPress: () => null },
+            { title: 'Title 4', id: 3, onPress: () => null },
+            { title: 'Title 5', id: 4, onPress: () => null },
+            { title: 'Title 6', id: '5', onPress: () => null }
           ]}
-          title='Menu'
-          openTitle='Close'
-          onPress={i => console.log(i)}
+          title="Menu"
+          openTitle="Close"
+          onPress={(i, z) => console.log(i, z)}
           buttonStyle={{ borderRadius: 0 }}
           optionsStyle={{ borderRadius: 8 }}
           buttonTextStyle={{ color: 'white' }}
@@ -60,9 +60,34 @@ export default App
 
 ```
 
-## API 🚧
+## API
 
-Work in progress.
+### `OptionsButton` API
+
+#### `OptionItem`
+```js
+type OptionItem = {
+  title: string,
+  id: string | number,
+  onPress?: Function
+}
+```
+
+| Prop          | Type          | Required  |
+| ------------- |:-------------:| ---------:|
+| `items`       | `Array<OptionItem>` | Yes     |
+| `title`       | `string`      |   Yes     |
+| `openTitle`   | `string`      | Yes       |
+| `onPress`     | `Function`    | |
+| `color`       | `string`      | |
+| `openedColor` | `string`      | |
+| `isLoading`   | `boolean`     | |
+| `containerStyle` | `any`      | |
+| `buttonStyle` | `any`         | |
+| `buttonTextStyle` | `any`     | |
+| `optionsStyle`| `any`         | |
+| `optionTextStyle` | `any`     | |
+| `separatorStyle` | `any`      | |
 
 ## License
 
@@ -70,4 +95,4 @@ MIT.
 
 ## Author
 
-Álvaro Medina Ballester <amedina apsl dot net>
+Álvaro Medina Ballester `amedina at apsl dot net`

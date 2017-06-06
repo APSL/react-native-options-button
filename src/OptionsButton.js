@@ -18,6 +18,7 @@ const ALMOST_ZERO: number = 0.00000001
 
 export type OptionItem = {
   title: string,
+  id: string | number,
   onPress?: Function
 }
 
@@ -60,6 +61,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
     items: PropTypes.arrayOf(
       PropTypes.shape({
         title: PropTypes.string.isRequired,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
         onPress: PropTypes.func
       })
     ).isRequired,
@@ -94,7 +96,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
     let collapseAnimation = Animated.timing(this.state.height, {
       toValue: height,
       duration: 200,
-      easing: Easing.inOut(Easing.bezier(1.000, 0.000, 0.915, 1.065))
+      easing: Easing.inOut(Easing.bezier(1.0, 0.0, 0.915, 1.065))
     })
     if (this.state.isCollapsed) {
       height = 44 * this.props.items.length + (this.props.items.length - 1)
@@ -121,7 +123,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
     // Pass the option selected
     InteractionManager.runAfterInteractions(() => {
       if (Number.isInteger(index) && this.props.onPress) {
-        this.props.onPress(index)
+        this.props.onPress(this.props.items[index], index)
       }
     })
   }
@@ -135,21 +137,20 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
           { backgroundColor: this.props.color, height: this.state.height }
         ]}
       >
-        {this.props.items.map((item: OptionItem, index: number, arr: Array<
-          OptionItem
-        >): OptionButton => (
-          <OptionButton
-            key={`${item.title}-${index}`}
-            index={index}
-            style={[styles.option]}
-            renderSeparator={index < arr.length - 1}
-            separatorStyle={this.props.separatorStyle}
-            textStyle={[styles.optionText, this.props.optionTextStyle]}
-            onPress={this._startAnimation}
-          >
-            {item.title}
-          </OptionButton>
-        ))}
+        {this.props.items.map(
+          (item: OptionItem, index: number, arr: Array<OptionItem>): OptionButton =>
+            <OptionButton
+              key={`${item.title}-${index}`}
+              index={index}
+              style={[styles.option]}
+              renderSeparator={index < arr.length - 1}
+              separatorStyle={this.props.separatorStyle}
+              textStyle={[styles.optionText, this.props.optionTextStyle]}
+              onPress={this._startAnimation}
+            >
+              {item.title}
+            </OptionButton>
+        )}
       </Animated.View>
     )
   }
