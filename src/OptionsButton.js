@@ -180,7 +180,11 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
           { backgroundColor: color, borderColor: 'white', width: width }
         ]}
       >
-        <Button textStyle={this.props.buttonTextStyle} onPress={this._startAnimation}>
+        <Button
+          style={[styles.button, this.props.buttonStyle]}
+          textStyle={this.props.buttonTextStyle}
+          onPress={this._startAnimation}
+        >
           {text}
         </Button>
       </Animated.View>
