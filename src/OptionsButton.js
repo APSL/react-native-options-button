@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     height: 44,
+    marginBottom: 10
   },
   options: {
     overflow: 'hidden',
