@@ -1,6 +1,7 @@
 /* @flow */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   View,
   TouchableOpacity,
@@ -102,8 +103,8 @@ const Button = React.createClass({
     }
     if (Button.isAndroid) {
       touchableProps = Object.assign(touchableProps, {
-        background: this.props.background ||
-          TouchableNativeFeedback.SelectableBackground()
+        background:
+          this.props.background || TouchableNativeFeedback.SelectableBackground()
       })
       return (
         <TouchableNativeFeedback {...touchableProps}>

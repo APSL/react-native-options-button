@@ -1,7 +1,8 @@
 /* @flow */
 
-import React, { PropTypes } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { View, Text, TouchableOpacity, StyleSheet, ViewPropTypes } from 'react-native'
 
 type DefaultProps = void
 type Props = {
@@ -21,7 +22,7 @@ class OptionButton extends React.Component<DefaultProps, Props, State> {
     children: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
     renderSeparator: PropTypes.bool.isRequired,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
     textStyle: Text.propTypes.style,
     separatorStyle: PropTypes.any
   }
