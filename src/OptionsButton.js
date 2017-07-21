@@ -177,7 +177,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
         style={[
           styles.button,
           this.props.buttonStyle,
-          { backgroundColor: color, borderColor: 'white', width: width }
+          { backgroundColor: color, borderColor: color, width: width }
         ]}
       >
         <Button
