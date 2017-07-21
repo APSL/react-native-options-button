@@ -20,12 +20,12 @@ const ALMOST_ZERO: number = 0.00000001
 export type OptionItem = {
   title: string,
   id: string | number,
-  onPress?: Function
+  onPress?: Function,
 }
 
 type DefaultProps = {
   color: string,
-  openedColor: string
+  openedColor: string,
 }
 type Props = {
   items: Array<OptionItem>,
@@ -40,23 +40,23 @@ type Props = {
   buttonTextStyle?: any,
   optionsStyle?: any,
   optionTextStyle?: any,
-  separatorStyle?: any
+  separatorStyle?: any,
 }
 type State = {
   isCollapsed: boolean,
   height: Animated.Value,
   width: Animated.Value,
-  saturation: Animated.Value
+  saturation: Animated.Value,
 }
 
 class OptionsButton extends React.Component<DefaultProps, Props, State> {
-  state: State
-  startAnimation: Function
+  state: State;
+  startAnimation: Function;
 
   static defaultProps = {
     color: 'hsla(192, 100%, 34%, 1)',
     openedColor: 'hsla(179, 0%, 65%, 1)'
-  }
+  };
 
   static propTypes = {
     items: PropTypes.arrayOf(
@@ -78,7 +78,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
     optionsStyle: PropTypes.any,
     optionTextStyle: PropTypes.any,
     separatorStyle: PropTypes.any
-  }
+  };
 
   constructor(props: Object) {
     super(props)
@@ -127,7 +127,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
         this.props.onPress(this.props.items[index], index)
       }
     })
-  }
+  };
 
   _renderOptions() {
     return (
@@ -139,7 +139,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
         ]}
       >
         {this.props.items.map(
-          (item: OptionItem, index: number, arr: Array<OptionItem>): OptionButton =>
+          (item: OptionItem, index: number, arr: Array<OptionItem>): OptionButton => (
             <OptionButton
               key={`${item.title}-${index}`}
               index={index}
@@ -151,6 +151,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
             >
               {item.title}
             </OptionButton>
+          )
         )}
       </Animated.View>
     )
@@ -167,23 +168,27 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
             this.props.buttonStyle
           ]}
         >
-          <ActivityIndicator animating={true} color="white" />
+          <ActivityIndicator animating={true} color='white' />
         </Animated.View>
       )
     }
     return (
-      <Button
+      <Animated.View
         activeOpacity={0.9}
         style={[
           styles.button,
           this.props.buttonStyle,
           { backgroundColor: color, borderColor: color, width: width }
         ]}
-        textStyle={this.props.buttonTextStyle}
-        onPress={this._startAnimation}
       >
-        {text}
-      </Button>
+        <Button
+          style={[styles.button, this.props.buttonStyle]}
+          textStyle={this.props.buttonTextStyle}
+          onPress={this._startAnimation}
+        >
+          {text}
+        </Button>
+      </Animated.View>
     )
   }
 
@@ -224,7 +229,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   button: {
-    borderRadius: 22
+    borderRadius: 10,
+    height: 44,
+    marginBottom: 10
   },
   options: {
     overflow: 'hidden',
