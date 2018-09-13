@@ -1,10 +1,15 @@
 /* @flow */
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import { View, Text, TouchableOpacity, StyleSheet, ViewPropTypes } from 'react-native'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ViewPropTypes
+} from 'react-native';
 
-type DefaultProps = void
 type Props = {
   index: number,
   children: string,
@@ -13,10 +18,9 @@ type Props = {
   style?: any,
   textStyle?: any,
   separatorStyle: any
-}
-type State = void
+};
 
-class OptionButton extends React.Component<DefaultProps, Props, State> {
+class OptionButton extends React.PureComponent<Props> {
   static propTypes = {
     index: PropTypes.number.isRequired,
     children: PropTypes.string.isRequired,
@@ -25,34 +29,37 @@ class OptionButton extends React.Component<DefaultProps, Props, State> {
     style: ViewPropTypes.style,
     textStyle: Text.propTypes.style,
     separatorStyle: PropTypes.any
-  }
+  };
 
   _onPress = () => {
-    this.props.onPress(this.props.index)
-  }
+    this.props.onPress(this.props.index);
+  };
 
   render() {
     const TouchableButton = (
       <TouchableOpacity
         onPress={this._onPress}
-        style={[styles.container, this.props.style]}
-      >
+        style={[styles.container, this.props.style]}>
         <Text style={[styles.text, this.props.textStyle]}>
           {this.props.children.toUpperCase()}
         </Text>
       </TouchableOpacity>
-    )
+    );
     if (this.props.renderSeparator) {
       return (
         <View>
           {TouchableButton}
           <View
-            style={[styles.separator, this.props.separatorStyle, styles.separatorHeight]}
+            style={[
+              styles.separator,
+              this.props.separatorStyle,
+              styles.separatorHeight
+            ]}
           />
         </View>
-      )
+      );
     }
-    return TouchableButton
+    return TouchableButton;
   }
 }
 
@@ -73,6 +80,6 @@ const styles = StyleSheet.create({
     height: 1,
     width: '100%'
   }
-})
+});
 
-export default OptionButton
+export default OptionButton;
