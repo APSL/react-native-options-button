@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   TouchableOpacity,
@@ -11,13 +11,17 @@ import {
   ActivityIndicator,
   TouchableNativeFeedback,
   Platform
-} from 'react-native'
+} from 'react-native';
 
-const Button = React.createClass({
-  propTypes: {
+export default class Button extends React.PureComponent<Props, State> {
+  static propTypes = {
     textStyle: Text.propTypes.style,
     disabledStyle: Text.propTypes.style,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.element]),
+    children: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.node,
+      PropTypes.element
+    ]),
     accessibilityLabel: PropTypes.string,
     activeOpacity: PropTypes.number,
     allowFontScaling: PropTypes.bool,
@@ -34,34 +38,29 @@ const Button = React.createClass({
     background: TouchableNativeFeedback.propTypes
       ? TouchableNativeFeedback.propTypes.background
       : PropTypes.any
-  },
+  };
 
-  statics: {
-    isAndroid: Platform.OS === 'android'
-  },
-
-  _renderChildren: function() {
-    let childElements = []
+  _renderChildren() {
+    let childElements = [];
     React.Children.forEach(this.props.children, item => {
       if (typeof item === 'string' || typeof item === 'number') {
         const element = (
           <Text
             style={[styles.textButton, this.props.textStyle]}
             allowFontScaling={this.props.allowFontScaling}
-            key={item}
-          >
+            key={item}>
             {item}
           </Text>
-        )
-        childElements.push(element)
+        );
+        childElements.push(element);
       } else if (React.isValidElement(item)) {
-        childElements.push(item)
+        childElements.push(item);
       }
-    })
-    return childElements
-  },
+    });
+    return childElements;
+  }
 
-  _renderInnerText: function() {
+  _renderInnerText() {
     if (this.props.isLoading) {
       return (
         <ActivityIndicator
@@ -70,24 +69,23 @@ const Button = React.createClass({
           style={styles.spinner}
           color={this.props.activityIndicatorColor || 'black'}
         />
-      )
+      );
     }
-    return this._renderChildren()
-  },
+    return this._renderChildren();
+  }
 
-  render: function() {
-    if (this.props.isDisabled === true || this.props.isLoading === true) {
+  render() {
+    if (this.props.isDisabled || this.props.isLoading) {
       return (
         <View
           style={[
             styles.button,
             this.props.style,
             this.props.disabledStyle || styles.opacity
-          ]}
-        >
+          ]}>
           {this._renderInnerText()}
         </View>
-      )
+      );
     }
     // Extract Touchable props
     let touchableProps = {
@@ -100,19 +98,19 @@ const Button = React.createClass({
       delayLongPress: this.props.delayLongPress,
       delayPressIn: this.props.delayPressIn,
       delayPressOut: this.props.delayPressOut
-    }
-    if (Button.isAndroid) {
+    };
+    if (Platform.OS === 'android') {
       touchableProps = Object.assign(touchableProps, {
         background:
           this.props.background || TouchableNativeFeedback.SelectableBackground()
-      })
+      });
       return (
         <TouchableNativeFeedback {...touchableProps}>
           <View style={[styles.button, this.props.style]}>
             {this._renderInnerText()}
           </View>
         </TouchableNativeFeedback>
-      )
+      );
     } else {
       return (
         <Animated.View style={[styles.button, this.props.style]}>
@@ -120,10 +118,10 @@ const Button = React.createClass({
             {this._renderInnerText()}
           </TouchableOpacity>
         </Animated.View>
-      )
+      );
     }
   }
-})
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -153,6 +151,4 @@ const styles = StyleSheet.create({
   opacity: {
     opacity: 0.5
   }
-})
-
-module.exports = Button
+});

@@ -11,7 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/APSL/react-native-options-button.git"
   },
-  "tags": ["react", "react-native", "react-component", "ios", "android"],
+  "tags": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "android"
+  ],
   "keywords": [
     "react",
     "react-native",
@@ -28,14 +34,13 @@
   },
   "homepage": "https://github.com/APSL/react-native-options-button#readme",
   "dependencies": {
-    "@types/prop-types": "^15.5.1",
-    "prop-types": "^15.5.10"
+    "@types/prop-types": "^15.5.5",
+    "prop-types": "^15.6.2"
   },
   "devDependencies": {
-    "babel-jest": "20.0.3",
-    "babel-preset-react-native": "1.9.2",
-    "jest": "20.0.4",
-    "react-test-renderer": "16.0.0-alpha.6"
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "react-test-renderer": "16.5.0"
   },
   "jest": {
     "preset": "react-native"

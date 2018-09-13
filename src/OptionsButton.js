@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
   Animated,
@@ -11,22 +11,18 @@ import {
   StyleSheet,
   Dimensions,
   InteractionManager
-} from 'react-native'
-import OptionButton from './OptionButton'
-import Button from './Button'
+} from 'react-native';
+import OptionButton from './OptionButton';
+import Button from './Button';
 
-const ALMOST_ZERO: number = 0.00000001
+const ALMOST_ZERO: number = 0.00000001;
 
 export type OptionItem = {
   title: string,
   id: string | number,
-  onPress?: Function,
-}
+  onPress?: Function
+};
 
-type DefaultProps = {
-  color: string,
-  openedColor: string,
-}
 type Props = {
   items: Array<OptionItem>,
   title: string,
@@ -40,19 +36,16 @@ type Props = {
   buttonTextStyle?: any,
   optionsStyle?: any,
   optionTextStyle?: any,
-  separatorStyle?: any,
-}
+  separatorStyle?: any
+};
 type State = {
   isCollapsed: boolean,
   height: Animated.Value,
   width: Animated.Value,
-  saturation: Animated.Value,
-}
+  saturation: Animated.Value
+};
 
-class OptionsButton extends React.Component<DefaultProps, Props, State> {
-  state: State;
-  startAnimation: Function;
-
+class OptionsButton extends React.PureComponent<Props, State> {
   static defaultProps = {
     color: 'hsla(192, 100%, 34%, 1)',
     openedColor: 'hsla(179, 0%, 65%, 1)'
@@ -81,33 +74,33 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
   };
 
   constructor(props: Object) {
-    super(props)
+    super(props);
     this.state = {
       isCollapsed: true,
       height: new Animated.Value(0),
       width: new Animated.Value(100),
       saturation: new Animated.Value(100)
-    }
+    };
   }
 
   _startAnimation = (index: number) => {
-    let height = ALMOST_ZERO
-    let saturation = 100
-    let width = 100
+    let height = ALMOST_ZERO;
+    let saturation = 100;
+    let width = 100;
     let collapseAnimation = Animated.timing(this.state.height, {
       toValue: height,
       duration: 200,
       easing: Easing.inOut(Easing.bezier(1.0, 0.0, 0.915, 1.065))
-    })
+    });
     if (this.state.isCollapsed) {
-      height = 44 * this.props.items.length + (this.props.items.length - 1)
-      saturation = 0
-      width = 0
+      height = 44 * this.props.items.length + (this.props.items.length - 1);
+      saturation = 0;
+      width = 0;
       collapseAnimation = Animated.spring(this.state.height, {
         toValue: height,
         tension: 260,
         friction: 10
-      })
+      });
     }
     Animated.parallel([
       Animated.timing(this.state.saturation, {
@@ -119,14 +112,14 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
         duration: 150
       }),
       collapseAnimation
-    ]).start()
-    this.setState({ isCollapsed: !this.state.isCollapsed })
+    ]).start();
+    this.setState({ isCollapsed: !this.state.isCollapsed });
     // Pass the option selected
     InteractionManager.runAfterInteractions(() => {
       if (Number.isInteger(index) && this.props.onPress) {
-        this.props.onPress(this.props.items[index], index)
+        this.props.onPress(this.props.items[index], index);
       }
-    })
+    });
   };
 
   _renderOptions() {
@@ -136,10 +129,13 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
           styles.options,
           this.props.optionsStyle,
           { backgroundColor: this.props.color, height: this.state.height }
-        ]}
-      >
+        ]}>
         {this.props.items.map(
-          (item: OptionItem, index: number, arr: Array<OptionItem>): OptionButton => (
+          (
+            item: OptionItem,
+            index: number,
+            arr: Array<OptionItem>
+          ): OptionButton => (
             <OptionButton
               key={`${item.title}-${index}`}
               index={index}
@@ -147,14 +143,13 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
               renderSeparator={index < arr.length - 1}
               separatorStyle={this.props.separatorStyle}
               textStyle={[styles.optionText, this.props.optionTextStyle]}
-              onPress={this._startAnimation}
-            >
+              onPress={this._startAnimation}>
               {item.title}
             </OptionButton>
           )
         )}
       </Animated.View>
-    )
+    );
   }
 
   _renderButton(color: string, width: number, text: string) {
@@ -166,11 +161,10 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
             styles.loader,
             { backgroundColor: this.props.color },
             this.props.buttonStyle
-          ]}
-        >
-          <ActivityIndicator animating={true} color='white' />
+          ]}>
+          <ActivityIndicator animating={true} color="white" />
         </Animated.View>
-      )
+      );
     }
     return (
       <Animated.View
@@ -179,29 +173,29 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
           styles.button,
           this.props.buttonStyle,
           { backgroundColor: color, borderColor: color, width: width }
-        ]}
-      >
+        ]}>
         <Button
           style={[styles.button, this.props.buttonStyle]}
           textStyle={this.props.buttonTextStyle}
-          onPress={this._startAnimation}
-        >
+          onPress={this._startAnimation}>
           {text}
         </Button>
       </Animated.View>
-    )
+    );
   }
 
   render() {
     const color = this.state.saturation.interpolate({
       inputRange: [0, 100],
       outputRange: [this.props.openedColor, this.props.color]
-    })
+    });
     const width = this.state.width.interpolate({
       inputRange: [0, 100],
       outputRange: [74, Dimensions.get('window').width - 50]
-    })
-    const text = this.state.isCollapsed ? this.props.title : this.props.openTitle
+    });
+    const text = this.state.isCollapsed
+      ? this.props.title
+      : this.props.openTitle;
     return (
       <View style={[styles.container, this.props.containerStyle]}>
         {this._renderOptions()}
@@ -209,7 +203,7 @@ class OptionsButton extends React.Component<DefaultProps, Props, State> {
           {this._renderButton(color, width, text)}
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -258,6 +252,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10
   }
-})
+});
 
-export default OptionsButton
+export default OptionsButton;
