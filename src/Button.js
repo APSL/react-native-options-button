@@ -13,10 +13,29 @@ import {
   Platform
 } from 'react-native';
 
-export default class Button extends React.PureComponent<Props, State> {
+type Props = {
+  textStyle: Object | number,
+  disabledStyle: Object | number,
+  children: any,
+  accessibilityLabel: string,
+  allowFontScaling: boolean,
+  isLoading: boolean,
+  isDisabled: boolean,
+  activityIndicatorColor: string,
+  delayLongPress: number,
+  delayPressIn: number,
+  delayPressOut: number,
+  onPress: Function,
+  onLongPress: Function,
+  onPressIn: Function,
+  onPressOut: Function,
+  background: any
+};
+
+class Button extends React.PureComponent<Props> {
   static propTypes = {
-    textStyle: Text.propTypes.style,
-    disabledStyle: Text.propTypes.style,
+    textStyle: PropTypes.object,
+    disabledStyle: PropTypes.object,
     children: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.node,
@@ -35,9 +54,7 @@ export default class Button extends React.PureComponent<Props, State> {
     onLongPress: PropTypes.func,
     onPressIn: PropTypes.func,
     onPressOut: PropTypes.func,
-    background: TouchableNativeFeedback.propTypes
-      ? TouchableNativeFeedback.propTypes.background
-      : PropTypes.any
+    background: PropTypes.any
   };
 
   _renderChildren() {
@@ -152,3 +169,5 @@ const styles = StyleSheet.create({
     opacity: 0.5
   }
 });
+
+export default Button;

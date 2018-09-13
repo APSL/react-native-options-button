@@ -19,9 +19,8 @@ type Props = {
   textStyle?: any,
   separatorStyle: any
 };
-type State = void;
 
-class OptionButton extends React.PureComponent<Props, State> {
+class OptionButton extends React.PureComponent<Props> {
   static propTypes = {
     index: PropTypes.number.isRequired,
     children: PropTypes.string.isRequired,
